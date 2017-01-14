@@ -6,7 +6,7 @@ const theme = {};
 
 // container
 theme.container = {
-	background: 'rgba(0, 0, 0, 0.8)',
+	background: 'rgba(0, 0, 0, 0.9)',
 	gutter: {
 		horizontal: 10,
 		vertical: 10,
@@ -29,9 +29,9 @@ theme.footer = {
 	color: 'white',
 	count: {
 		color: 'rgba(255, 255, 255, 0.75)',
-		fontSize: '0.85em',
+		fontSize: '1.05em',
 	},
-	height: 40,
+	height: 240,
 	gutter: {
 		horizontal: 0,
 		vertical: 5,

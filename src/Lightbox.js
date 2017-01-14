@@ -134,7 +134,7 @@ class Lightbox extends Component {
 				direction="left"
 				icon="arrowLeft"
 				onClick={this.gotoPrev}
-				title={this.props.leftArrowTitle}
+				title="Previous (Left arrow key)"
 				type="button"
 			/>
 		);
@@ -147,13 +147,17 @@ class Lightbox extends Component {
 				direction="right"
 				icon="arrowRight"
 				onClick={this.gotoNext}
-				title={this.props.rightArrowTitle}
+				title="Next (Right arrow key)"
 				type="button"
 			/>
 		);
 	}
 	renderDialog () {
 		const {
+			images,
+			currentImage,
+			imageCountSeparator,
+			showImageCount,
 			backdropClosesModal,
 			customControls,
 			isOpen,
@@ -176,14 +180,20 @@ class Lightbox extends Component {
 				onClick={!!backdropClosesModal && onClose}
 				onTouchEnd={!!backdropClosesModal && onClose}
 			>
-				<div className={css(classes.content)} style={{ marginBottom: offsetThumbnails, maxWidth: width }}>
+				<div className={css(classes.content)} style={{ marginBottom: offsetThumbnails, maxWidth: width, width: width }}>
 					<Header
 						customControls={customControls}
 						onClose={onClose}
 						showCloseButton={showCloseButton}
-						closeButtonTitle={this.props.closeButtonTitle}
 					/>
 					{this.renderImages()}
+					<Footer
+						caption={images[currentImage].caption}
+						countCurrent={currentImage + 1}
+						countSeparator={imageCountSeparator}
+						countTotal={images.length}
+						showCount={showImageCount}
+					/>
 				</div>
 				{this.renderThumbnails()}
 				{this.renderArrowPrev()}
@@ -196,10 +206,10 @@ class Lightbox extends Component {
 		const {
 			currentImage,
 			images,
-			imageCountSeparator,
 			onClickImage,
-			showImageCount,
 			showThumbnails,
+			imageCountSeparator,
+			showImageCount,
 		} = this.props;
 
 		if (!images || !images.length) return null;
@@ -217,6 +227,14 @@ class Lightbox extends Component {
 		const thumbnailsSize = showThumbnails ? theme.thumbnail.size : 0;
 		const heightOffset = `${theme.header.height + theme.footer.height + thumbnailsSize + (theme.container.gutter.vertical)}px`;
 
+		const imageCount = showImageCount ? (
+			<div className={css(classes.footerCount)}>
+				{currentImage + 1}
+				{imageCountSeparator}
+				{images.length}
+			</div>)
+			: <span />;
+
 		return (
 			<figure className={css(classes.figure)}>
 				{/*
@@ -228,7 +246,6 @@ class Lightbox extends Component {
 					className={css(classes.image)}
 					onClick={!!onClickImage && onClickImage}
 					sizes={sizes}
-					alt={image.alt}
 					src={image.src}
 					srcSet={srcset}
 					style={{
@@ -236,13 +253,7 @@ class Lightbox extends Component {
 						maxHeight: `calc(100vh - ${heightOffset})`,
 					}}
 				/>
-				<Footer
-					caption={images[currentImage].caption}
-					countCurrent={currentImage + 1}
-					countSeparator={imageCountSeparator}
-					countTotal={images.length}
-					showCount={showImageCount}
-				/>
+				{imageCount}
 			</figure>
 		);
 	}
@@ -271,7 +282,6 @@ class Lightbox extends Component {
 
 Lightbox.propTypes = {
 	backdropClosesModal: PropTypes.bool,
-	closeButtonTitle: PropTypes.string,
 	currentImage: PropTypes.number,
 	customControls: PropTypes.arrayOf(PropTypes.node),
 	enableKeyboardInput: PropTypes.bool,
@@ -285,13 +295,11 @@ Lightbox.propTypes = {
 		})
 	).isRequired,
 	isOpen: PropTypes.bool,
-	leftArrowTitle: PropTypes.string,
 	onClickImage: PropTypes.func,
 	onClickNext: PropTypes.func,
 	onClickPrev: PropTypes.func,
 	onClose: PropTypes.func.isRequired,
 	preloadNextImage: PropTypes.bool,
-	rightArrowTitle: PropTypes.string,
 	showCloseButton: PropTypes.bool,
 	showImageCount: PropTypes.bool,
 	showThumbnails: PropTypes.bool,
@@ -300,19 +308,16 @@ Lightbox.propTypes = {
 	width: PropTypes.number,
 };
 Lightbox.defaultProps = {
-	closeButtonTitle: 'Close (Esc)',
 	currentImage: 0,
 	enableKeyboardInput: true,
 	imageCountSeparator: ' of ',
-	leftArrowTitle: 'Previous (Left arrow key)',
 	onClickShowNextImage: true,
 	preloadNextImage: true,
-	rightArrowTitle: 'Next (Right arrow key)',
 	showCloseButton: true,
 	showImageCount: true,
 	theme: {},
 	thumbnailOffset: 2,
-	width: 1024,
+	width: '100%',
 };
 Lightbox.childContextTypes = {
 	theme: PropTypes.object.isRequired,
@@ -321,6 +326,7 @@ Lightbox.childContextTypes = {
 const classes = StyleSheet.create({
 	content: {
 		position: 'relative',
+		height: '100%',
 	},
 	figure: {
 		margin: 0, // remove browser default
@@ -334,6 +340,13 @@ const classes = StyleSheet.create({
 		// disable user select
 		WebkitTouchCallout: 'none',
 		userSelect: 'none',
+	},
+	footerCount: {
+		color: theme.footer.count.color,
+		fontSize: theme.footer.count.fontSize,
+		margin: '0 auto',
+		display: 'block',
+		textAlign: 'center'
 	},
 });
 

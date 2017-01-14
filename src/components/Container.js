@@ -21,7 +21,7 @@ Container.contextTypes = {
 
 const defaultStyles = {
 	container: {
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		backgroundColor: defaults.container.background,
 		boxSizing: 'border-box',
 		display: 'flex',

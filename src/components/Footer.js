@@ -5,25 +5,13 @@ import { deepMerge } from '../utils';
 
 function Footer ({
 	caption,
-	countCurrent,
-	countSeparator,
-	countTotal,
-	showCount,
 	...props,
 }, {
 	theme,
 }) {
-	if (!caption && !showCount) return null;
+	if (!caption) return null;
 
 	const classes = StyleSheet.create(deepMerge(defaultStyles, theme));
-
-	const imageCount = showCount ? (
-		<div className={css(classes.footerCount)}>
-			{countCurrent}
-			{countSeparator}
-			{countTotal}
-		</div>)
-		: <span />;
 
 	return (
 		<div className={css(classes.footer)} {...props}>
@@ -32,7 +20,6 @@ function Footer ({
 					{caption}
 				</figcaption>
 			) : <span />}
-			{imageCount}
 		</div>
 	);
 };
@@ -61,11 +48,9 @@ const defaultStyles = {
 		paddingLeft: defaults.footer.gutter.horizontal,
 		paddingRight: defaults.footer.gutter.horizontal,
 		paddingTop: defaults.footer.gutter.vertical,
-	},
-	footerCount: {
-		color: defaults.footer.count.color,
-		fontSize: defaults.footer.count.fontSize,
-		paddingLeft: '1em', // add a small gutter for the caption
+		position: 'absolute',
+		bottom: '0',
+		width: '100%'
 	},
 	footerCaption: {
 		flex: '1 1 0',
