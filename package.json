@@ -1,5 +1,5 @@
 {
-  "name": "react-images",
+  "name": "paratissima-react-images",
   "version": "0.5.2",
   "description": "A simple, responsive lightbox component for displaying an array of images with React.js",
   "main": "lib/Lightbox.js",
